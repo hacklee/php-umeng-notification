@@ -1,0 +1,23 @@
+{
+  "name": "hacklee/umeng-notification",
+  "description": "umeng-notification,友盟推送,消息推送,php-notification",
+  "license": "MIT",
+  "homepage": "https://github.com/hacklee/php-umeng-notification",
+  "type": "library",
+  "authors": [
+    {
+      "name": "hacklee",
+      "email": "517184100@qq.com",
+      "homepage": "http://lgy168.xyz"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hacklee\\Umeng": "src/"
+    }
+  }
+}
