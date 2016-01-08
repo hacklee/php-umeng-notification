@@ -49,7 +49,7 @@ class UmengNotifyApi
             'android',
             'ios'
         ])) {
-            throw new Exception('系统类型错误，os 必须为android或');
+            throw new Exception('系统类型错误，os 必须为android或ios');
         }
     }
 
