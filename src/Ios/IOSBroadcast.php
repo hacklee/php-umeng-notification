@@ -2,7 +2,7 @@
 
 namespace Hacklee\Umeng\Ios;
 
-use Hacklee\Umeng\IosNotification;
+use Hacklee\Umeng\IOSNotification;
 
 class IOSBroadcast extends IOSNotification
 {

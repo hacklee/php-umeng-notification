@@ -3,7 +3,7 @@
 namespace Hacklee\Umeng\Ios;
 
 use Exception;
-use Hacklee\Umeng\IosNotification;
+use Hacklee\Umeng\IOSNotification;
 
 class IOSFilecast extends IOSNotification
 {
@@ -12,23 +12,28 @@ class IOSFilecast extends IOSNotification
     {
         parent::__construct();
         $this->data["type"] = "filecast";
-        $this->data["file_id"] = NULL;
+        $this->data["file_id"] = null;
     }
-    
+
     // return file_id if SUCCESS, else throw Exception with details.
     public function uploadContents($content)
     {
-        if ($this->data["appkey"] == NULL)
+        if ($this->data["appkey"] == null) {
             throw new Exception("appkey should not be NULL!");
-        if ($this->data["timestamp"] == NULL)
+        }
+
+        if ($this->data["timestamp"] == null) {
             throw new Exception("timestamp should not be NULL!");
-        if (! is_string($content))
+        }
+
+        if (!is_string($content)) {
             throw new Exception("content should be a string!");
-        
+        }
+
         $post = array(
             "appkey" => $this->data["appkey"],
             "timestamp" => $this->data["timestamp"],
-            "content" => $content
+            "content" => $content,
         );
         $url = $this->host . $this->uploadPath;
         $postBody = json_encode($post);
@@ -48,20 +53,28 @@ class IOSFilecast extends IOSNotification
         curl_close($ch);
         //print($result . "\r\n");
         if ($httpCode == "0") // time out
+        {
             throw new Exception("Curl error number:" . $curlErrNo . " , Curl error details:" . $curlErr . "\r\n");
-        else if ($httpCode != "200") // we did send the notifition out and got a non-200 response
+        } else if ($httpCode != "200") // we did send the notifition out and got a non-200 response
+        {
             throw new Exception("http code:" . $httpCode . " details:" . $result . "\r\n");
-        $returnData = json_decode($result, TRUE);
-        if ($returnData["ret"] == "FAIL")
+        }
+
+        $returnData = json_decode($result, true);
+        if ($returnData["ret"] == "FAIL") {
             throw new Exception("Failed to upload file, details:" . $result . "\r\n");
-        else
+        } else {
             $this->data["file_id"] = $returnData["data"]["file_id"];
+        }
+
     }
 
     public function getFileId()
     {
-        if (array_key_exists("file_id", $this->data))
+        if (array_key_exists("file_id", $this->data)) {
             return $this->data["file_id"];
-        return NULL;
+        }
+
+        return null;
     }
 }

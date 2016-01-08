@@ -11,6 +11,6 @@ class IOSUnicast extends IOSNotification
     {
         parent::__construct();
         $this->data["type"] = "unicast";
-        $this->data["device_tokens"] = NULL;
+        $this->data["device_tokens"] = null;
     }
 }
