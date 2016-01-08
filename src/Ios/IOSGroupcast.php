@@ -2,7 +2,7 @@
 
 namespace Hacklee\Umeng\Ios;
 
-use Hacklee\Umeng\IosNotification;
+use Hacklee\Umeng\IOSNotification;
 
 class IOSGroupcast extends IOSNotification
 {
@@ -11,6 +11,6 @@ class IOSGroupcast extends IOSNotification
     {
         parent::__construct();
         $this->data["type"] = "groupcast";
-        $this->data["filter"] = NULL;
+        $this->data["filter"] = null;
     }
 }
