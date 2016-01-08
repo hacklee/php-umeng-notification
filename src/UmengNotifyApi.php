@@ -39,7 +39,7 @@ class UmengNotifyApi
         $conf = $os === 'android' ? NotificationConfig::ANDROID : NotificationConfig::IOS;
         $this->appkey = $key ?  : $conf['appKey'];
         $this->appMasterSecret = $secret ?  : $conf['appMasterSecret'];
-        $this->productionMode = $productionMode ?  : $conf['productionMode'];
+        $this->productionMode = is_null($productionMode) ? $conf['productionMode'] : $productionMode;
         $this->timestamp = strval(time());
     }
 
