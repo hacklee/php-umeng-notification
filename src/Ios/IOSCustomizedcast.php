@@ -35,10 +35,6 @@ class IOSCustomizedcast extends IOSNotification
             throw new Exception("timestamp should not be NULL!");
         }
 
-        if ($this->data["validation_token"] == null) {
-            throw new Exception("validation_token should not be NULL!");
-        }
-
         if (!is_string($content)) {
             throw new Exception("content should be a string!");
         }
@@ -46,11 +42,15 @@ class IOSCustomizedcast extends IOSNotification
         $post = array(
             "appkey" => $this->data["appkey"],
             "timestamp" => $this->data["timestamp"],
-            "validation_token" => $this->data["validation_token"],
             "content" => $content,
         );
 
-        $ch = curl_init($this->host . $this->uploadPath);
+        $postBody = json_encode($post);
+        $url = $this->host . $this->uploadPath;
+        $sign = md5("POST" . $url . $postBody . $this->appMasterSecret);
+        $url = $url . "?sign=" . $sign;
+
+        $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -71,7 +71,7 @@ class IOSCustomizedcast extends IOSNotification
             throw new Exception("http code:" . $httpCode . "\r\n" . "details:" . $result . "\r\n");
         }
 
-        $returnData = json_decode($result);
+        $returnData = json_decode($result, true);
         if ($returnData["ret"] == "FAIL") {
             throw new Exception("Failed to upload file, details:" . $result . "\r\n");
         } else {

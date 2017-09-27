@@ -29,19 +29,21 @@ class AndroidCustomizedcast extends AndroidNotification
             throw new Exception("appkey should not be NULL!");
         if ($this->data["timestamp"] == NULL)
             throw new Exception("timestamp should not be NULL!");
-        if ($this->data["validation_token"] == NULL)
-            throw new Exception("validation_token should not be NULL!");
         if (! is_string($content))
             throw new Exception("content should be a string!");
         
         $post = array(
             "appkey" => $this->data["appkey"],
             "timestamp" => $this->data["timestamp"],
-            "validation_token" => $this->data["validation_token"],
             "content" => $content
         );
-        
-        $ch = curl_init($this->host . $this->uploadPath);
+
+        $postBody = json_encode($post);
+        $url = $this->host . $this->uploadPath;
+        $sign = md5("POST" . $url . $postBody . $this->appMasterSecret);
+        $url = $url . "?sign=" . $sign;
+
+        $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -53,12 +55,13 @@ class AndroidCustomizedcast extends AndroidNotification
         $curlErrNo = curl_errno($ch);
         $curlErr = curl_error($ch);
         curl_close($ch);
-        //print($result . "\r\n");
+
         if ($httpCode == "0") // time out
             throw new Exception("Curl error number:" . $curlErrNo . " , Curl error details:" . $curlErr . "\r\n");
         else if ($httpCode != "200") // we did send the notifition out and got a non-200 response
             throw new Exception("http code:" . $httpCode . "\r\n" . "details:" . $result . "\r\n");
-        $returnData = json_decode($result);
+
+        $returnData = json_decode($result, true);
         if ($returnData["ret"] == "FAIL")
             throw new Exception("Failed to upload file, details:" . $result . "\r\n");
         else
